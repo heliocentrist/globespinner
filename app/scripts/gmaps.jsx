@@ -96,8 +96,8 @@ var searchForPhotos = function(address, callback) {
 var Picture = React.createClass({
 	render: function(){
         return (
-        	<div>
-            	<img src={this.props.src} width="500" />
+        	<div className="pic">
+            	<img src={this.props.src} />
             </div>
         );
     }
@@ -118,7 +118,7 @@ var Photos = React.createClass({
             pictures = <p>Loading images..</p>;
         }
         return (
-            <div>
+            <div id="container">
                 {pictures}
             </div>
         );
@@ -133,19 +133,27 @@ var Photos = React.createClass({
 		if (address) {
 				searchForPhotos(address, function(photos) {
 					self.setState({ pictures: photos });
+
+						var container = document.querySelector('#container');
+
+						var msnry = new Masonry( container, {
+						  // options
+						  columnWidth: 400,
+						  itemSelector: '.pic'
+						});
+
+						imagesLoaded( container, function() {
+						  msnry.layout();
+						});
 				});
 		}
 	},
 
 	componentDidUpdate: function(prevProps) {
 
-		console.log('updated');
-
 		if (prevProps.address === this.props.address) {
 			return;
 		}
-
-		console.log('updated2');
 
 		var self = this;
 
@@ -154,6 +162,16 @@ var Photos = React.createClass({
 		if (address) {
 				searchForPhotos(address, function(photos) {
 					self.setState({ pictures: photos });
+
+					var msnry = new Masonry( '#container', {
+						  // options
+						  columnWidth: 400,
+						  itemSelector: '.pic'
+						});
+
+					imagesLoaded( container, function() {
+						  msnry.layout();
+						});
 				});
 		}
 	}
